@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if es_inicio %}Identificación de Aves de Costa Rica{% else %}Aves de Costa Rica{% endif %}</title>
+    <style>
+        /* Estilos comunes */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #2c7a51;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 0;
+            background-image: linear-gradient(135deg, #2c7a51 0%, #1c5f3b 100%);
+        }
+        
+        .header-title {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Navegación */
+        .nav-links {
+            background-color: #1c5f3b;
+            padding: 15px 0;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            display: inline-block;
+            padding: 5px 10px;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        h1 {
+            color: #106b21;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            max-width: 600px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        form div {
+            margin-bottom: 15px;
+        }
+        
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        button {
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #2c7a51;
+            box-shadow: 0 0 0 2px rgba(44, 122, 81, 0.2);
+        }
+
+        button {
+            background-color: #2c7a51;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #1c5f3b;
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c62828;
+        }
+        
+        
+        /* Estilos para la página de inicio */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            flex-basis: calc(33.333% - 20px);
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            border-top: 4px solid #2c7a51;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        }
+        
+        .feature h3 {
+            color: #2c7a51;
+            margin-top: 0;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        .cta-section {
+            background-color: #2c7a51;
+            color: white;
+            padding: 50px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 60px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background-image: linear-gradient(135deg, #2c7a51 0%, #1c5f3b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M95,50 C95,74.85 74.85,95 50,95 C25.15,95 5,74.85 5,50 C5,25.15 25.15,5 50,5 C74.85,5 95,25.15 95,50 Z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/></svg>');
+            background-size: 150px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .cta-section > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-top: 0;
+            border-bottom: none;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            font-size: 1.1em;
+            max-width: 700px;
+            margin: 0 auto 25px;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: #2c7a51;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 2px solid transparent;
+        }
+        
+        .cta-button:hover {
+            background-color: transparent;
+            color: white;
+            transform: translateY(-3px);
+            border: 2px solid white;
+        }
+        
+        .bird-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+        
+        .bird-card {
+            flex-basis: calc(33.333% - 20px);
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            padding: 0;
+            border: none;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .bird-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        }
+        
+        .bird-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .bird-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .bird-card:hover .bird-image img {
+            transform: scale(1.05);
+        }
+        
+        .bird-info {
+            padding: 20px;
+            border-top: 4px solid #2c7a51;
+            background: white;
+            border-radius: 0 0 12px 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .bird-info h3 {
+            margin-top: 0;
+            color: #2c7a51;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        
+        .bird-info p {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .bird-info p.bird-credit {
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: #595959;
+        }
+
+        .bird-credit a {
+            color: inherit;
+        }
+        
+        .about-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+            background-image: linear-gradient(to right, white 0%, #f8f9fa 100%);
+        }
+        
+        .about-text h2 {
+            margin-top: 0;
+            color: #2c7a51;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .about-text h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #2c7a51;
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        /* Estilos para la sección "¿Cómo funciona?" */
+        ol {
+            padding-left: 20px;
+            margin: 25px 0;
+        }
+        
+        ol li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+        
+        ol li strong {
+            color: #2c7a51;
+            font-weight: 600;
+        }
+        
+        footer {
+            background-color: #1c5f3b;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 80px;
+            background-image: linear-gradient(135deg, #2c7a51 0%, #1c5f3b 100%);
+        }
+        
+        footer p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .container {
+                width: 95%;
+            }
+            
+            .feature, .bird-card {
+                flex-basis: calc(50% - 15px);
+            }
+            
+            .cta-section {
+                padding: 40px 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 40px 0;
+            }
+            
+            .header-title {
+                font-size: 2.2em;
+            }
+            
+            .about-section {
+                padding: 30px;
+            }
+            
+            .about-text h2 {
+                font-size: 1.6em;
+            }
+            
+            .cta-button {
+                padding: 12px 25px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .feature, .bird-card {
+                flex-basis: 100%;
+            }
+            
+            .header-title {
+                font-size: 1.8em;
+            }
+            
+            .nav-links a {
+                display: block;
+                margin: 10px 0;
+            }
+            
+            .cta-section {
+                padding: 30px 20px;
+            }
+            
+            h1, h2 {
+                font-size: 1.5em;
+            }
+            
+            .feature h3, .bird-info h3 {
+                font-size: 1.2em;
+            }
+        }
+        
+        .json-display {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-top: 20px;
+        }
+        
+        .validation-badge {
+            font-size: 0.8em;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-left: 10px;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .validated {
+            background-color: #2c7a51;
+            color: white;
+        }
+        
+        .validated::before {
+            content: '✓ ';
+        }
+        
+        .ai-only {
+            background-color: #e67e22;
+            color: white;
+        }
+        
+        .ai-only::before {
+            content: '🤖 ';
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .badge-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .error {
+            color: #d9534f;
+            background-color: #f9f2f2;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        button:hover {
+            background-color: #1c5f3b;
+        }
+
+        #resultado, .results {
+            margin-top: 30px;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            width: 100%;
+        }
+        
+        .results h2 {
+            color: #2c7a51;
+            margin-top: 0;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .bird-item {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .bird-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .bird-item strong {
+            color: #2c7a51;
+        }
+        
+        .results ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    {% if es_inicio %}
+    <!-- Página de inicio informativa -->
+    <header>
+        <div class="container">
+            <h1 class="header-title">Identificación de Aves de Costa Rica</h1>
+            <p>Descubre y aprende sobre la increíble diversidad de aves en Costa Rica</p>
+        </div>
+    </header>
+    
+    <div class="nav-links">
+        <div class="container">
+            <a href="/">Inicio</a>
+            <a href="/busca">Búsqueda de Aves</a>
+            <a href="/analizar-ave">Analizar Imagen</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Bienvenidos a nuestra plataforma de identificación de aves</h2>
+        <p>
+            Costa Rica es hogar de más de 900 especies de aves, lo que representa aproximadamente el 9% de todas las especies de aves conocidas en el mundo. 
+            Nuestra aplicación combina inteligencia artificial avanzada con una base de conocimiento especializada para ayudarte a identificar y aprender 
+            sobre estas maravillosas criaturas.
+        </p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>Búsqueda Avanzada</h3>
+                <p>Encuentra aves por color, hábitat, alimentación y más características específicas.</p>
+            </div>
+            <div class="feature">
+                <h3>Análisis de Imágenes</h3>
+                <p>Sube una foto de un ave y nuestra IA te ayudará a identificarla con precisión.</p>
+            </div>
+            <div class="feature">
+                <h3>Base de Conocimiento</h3>
+                <p>Accede a información detallada y verificada sobre las aves de Costa Rica.</p>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <h2>¿Tienes una foto de un ave que quieres identificar?</h2>
+            <p>Nuestra herramienta de análisis de imágenes puede ayudarte a identificar el ave y proporcionarte información detallada sobre ella.</p>
+            <a href="/analizar-ave" class="cta-button">Analizar Imagen</a>
+        </div>
+        
+        <h2>Descubre la diversidad de aves en Costa Rica</h2>
+        <div class="bird-gallery">
+            {% for ave in aves_destacadas %}
+            <div class="bird-card">
+                <div class="bird-image">
+                    <img src="{{ ave.imagen }}" alt="{{ ave.alt }}" loading="lazy">
+                </div>
+                <div class="bird-info">
+                    <h3>{{ ave.nombre }}</h3>
+                    <p>{{ ave.descripcion }}</p>
+                    <p class="bird-credit">
+                        Foto: {{ ave.credito.autor }},
+                        <a href="{{ ave.credito.licencia_url }}" rel="license noopener" target="_blank">{{ ave.credito.licencia }}</a>,
+                        <a href="{{ ave.credito.fuente }}" rel="noopener" target="_blank">Wikimedia Commons</a>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="about-section">
+            <div class="about-text">
+                <h2>Sobre nuestro proyecto</h2>
+                <p>
+                    Nuestro proyecto combina tecnologías avanzadas de inteligencia artificial con una base de conocimiento en Prolog 
+                    para proporcionar identificaciones precisas de aves. Utilizamos Azure OpenAI para analizar imágenes y extraer 
+                    características clave, que luego se validan contra nuestra base de datos especializada.
+                </p>
+                <p>
+                    La biodiversidad de Costa Rica es uno de sus mayores tesoros, y las aves representan una parte significativa de esta riqueza natural. 
+                    Nuestro objetivo es hacer que la identificación de aves sea accesible para todos, desde ornitólogos experimentados hasta 
+                    entusiastas principiantes y turistas que visitan este hermoso país.
+                </p>
+            </div>
+        </div>
+        
+        <h2>¿Cómo funciona?</h2>
+        <p>
+            Nuestra aplicación utiliza un enfoque de dos pasos para la identificación de aves:
+        </p>
+        <ol>
+            <li>
+                <strong>Análisis de IA:</strong> Cuando subes una imagen, nuestro sistema basado en Azure OpenAI analiza la imagen 
+                para identificar el ave y extraer características clave como color, forma y patrones.
+            </li>
+            <li>
+                <strong>Validación con base de conocimiento:</strong> Los resultados del análisis de IA se validan contra nuestra 
+                base de conocimiento en Prolog, que contiene información detallada y verificada sobre las aves de Costa Rica.
+            </li>
+            <li>
+                <strong>Resultados combinados:</strong> Te presentamos los resultados combinados, mostrando tanto la información 
+                identificada por la IA como la información validada de nuestra base de conocimiento.
+            </li>
+        </ol>
+        
+        <div class="cta-section">
+            <h2>Explora nuestra base de datos de aves</h2>
+            <p>Utiliza nuestra herramienta de búsqueda para explorar la diversidad de aves en Costa Rica por características específicas.</p>
+            <a href="/busca" class="cta-button">Buscar Aves</a>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Identificación de Aves de Costa Rica. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    {% elif es_analisis %}
+    <!-- Página de análisis de imagen -->
+    <div class="nav-links">
+        <div class="container">
+            <a href="/">Inicio</a>
+            <a href="/busca">Búsqueda de Aves</a>
+            <a href="/analizar-ave">Analizar Imagen</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>Análisis de Imagen de Ave</h1>
+        
+        {% if error %}
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+        
+        <!-- Formulario para análisis de imagen -->
+        <form action="/analizar-ave" method="post" enctype="multipart/form-data">
+            <h2>Sube una imagen para analizar</h2>
+            <input type="file" name="imagen" accept="image/*" required>
+            <button type="submit">Analizar Imagen</button>
+        </form>
+        
+        {% if imagen_subida and resultados %}
+        <div id="resultado-analisis" class="results">
+            <h2>Resultados del Análisis
+                {% if validado_prolog %}
+                <span class="validation-badge validated">Validado con Prolog</span>
+                {% else %}
+                <span class="validation-badge ai-only">Solo IA</span>
+                {% endif %}
+            </h2>
+            
+            <ul>
+            {% for ave in resultados %}
+                <li class="bird-item">
+                    <strong>{{ ave.nombre }}</strong> {% if ave.NombreCientifico %}({{ ave.NombreCientifico }}){% endif %}<br>
+                    <strong>Reino:</strong> {{ ave.Reino }}<br>
+                    <strong>Filo:</strong> {{ ave.Filo }}<br>
+                    <strong>Color:</strong> {{ ave.Color }}<br>
+                    <strong>Peso:</strong> {{ ave.Peso }}<br>
+                    <strong>Alimento:</strong> {{ ave.Alimento }}<br>
+                    <strong>Hábitat:</strong> {{ ave.Habitat }}<br>
+                    <strong>Descripción:</strong> {{ ave.Descripcion }}
+                </li>
+            {% endfor %}
+            </ul>
+            <!--
+            {% if datos_ia_json %}
+            <div class="json-display">
+                {{ datos_ia_json | safe }}
+            </div>
+            {% endif %}
+            -->
+        </div>
+        {% endif %}
+    </div>
+    
+    {% else %}
+    <!-- Página de búsqueda tradicional -->
+    <div class="nav-links">
+        <div class="container">
+            <a href="/">Inicio</a>
+            <a href="/busca">Búsqueda de Aves</a>
+            <a href="/analizar-ave">Analizar Imagen</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>Buscador de Aves de Costa Rica</h1>
+        
+        {% if error %}
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+        
+        <!-- Formulario de búsqueda tradicional -->
+        <form action="/busca" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="color">Color:</label>
+                <input type="text" id="color" name="color" value="{{ color }}" placeholder="Ej: rojo, azul, verde...">
+            </div>
+            <div>
+                <label for="habitat">Hábitat:</label>
+                <input type="text" id="habitat" name="habitat" value="{{ habitat }}" placeholder="Ej: bosque, montaña, costa...">
+            </div>
+            <div>
+                <label for="peso">Peso:</label>
+                <input type="text" id="peso" name="peso" value="{{ peso }}" placeholder="Ej: ligero, pesado...">
+            </div>
+            <div>
+                <label for="alimento">Alimentación:</label>
+                <input type="text" id="alimento" name="alimento" value="{{ alimento }}" placeholder="Ej: insectos, frutas, semillas...">
+            </div>
+            <div>
+                <label for="imagen">O sube una imagen para detectar color:</label>
+                <input type="file" id="imagen" name="imagen" accept="image/*">
+            </div>
+            <button type="submit">Buscar</button>
+        </form>
+    
+        {% if resultados %}
+        <div id="resultado" class="results">
+            <h2>Resultados de la Búsqueda</h2>
+            <ul>
+            {% for ave in resultados %}
+                <li class="bird-item">
+                    <strong>{{ ave.Nombre }}</strong> {% if ave.NombreCientifico %}({{ ave.NombreCientifico }}){% endif %}<br>
+                    <strong>Reino:</strong> {{ ave.Reino }}<br>
+                    <strong>Filo:</strong> {{ ave.Filo }}<br>
+                    <strong>Color:</strong> {{ ave.Color }}<br>
+                    <strong>Peso:</strong> {{ ave.Peso }}<br>
+                    <strong>Alimento:</strong> {{ ave.Alimento }}<br>
+                    <strong>Hábitat:</strong> {{ ave.Habitat }}<br>
+                    <strong>Descripción:</strong> {{ ave.Descripcion }}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- No se necesita script JavaScript ya que usamos formularios tradicionales con POST -->
+</body>
+</html>
